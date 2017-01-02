@@ -1,34 +1,19 @@
 package romatthe.mlnes.rom;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.zip.CRC32;
+import org.apache.commons.io.FileUtils;
 
 public class ROM {
 
-    private static final int PRG_ROM_SIZE = 16384;
-    private static final int CHR_ROM_SIZE = 8192;
-    private static final int PRG_RAM_SIZE = 8192;
+    public static final int PRG_ROM_SIZE = 16384;
+    public static final int CHR_ROM_SIZE = 8192;
+    public static final int PRG_RAM_SIZE = 8192;
 
     private final ROMHeader header;
     private final byte[] data;
 
-    public ROM() throws IOException {
-        InputStream in = FileUtils.openInputStream(new File("/Users/robinm/Source/mlnes/src/main/resources/test.bin"));
-        byte[] header = IOUtils.readFully(in, 16);
+    public ROM(byte[] header, byte[] data) {
         this.header = new ROMHeader(header);
-
-        int romDataSize = this.header.getPRGROMSizeNr() * PRG_ROM_SIZE + this.header.getCHRROMSizeNr() * CHR_ROM_SIZE;
-        byte[] data = IOUtils.readFully(in, romDataSize);
-
-        if (data.length != romDataSize) {
-            throw new IOException("ROM size does not match size declared in header!");
-        }
-
         this.data = data;
     }
 
