@@ -9,14 +9,6 @@ public class ROMHeader {
     private final int mapper;
     private final int flag6;
     private final int flag7;
-    //private final int flag9;
-
-    //Mirroring       : Horizontal
-    //TV System       : NTSC
-    //Has NVRAM       : False
-    //Has Trainer     : False
-    //Is PlayChoice-10: False
-    //Is VS. UniSystem: False
 
     public ROMHeader(byte[] header) {
         this.headerBytes = header;
@@ -64,6 +56,10 @@ public class ROMHeader {
 
     public boolean isVsUnisystem() {
         return (this.flag7 & 1) == 1;
+    }
+
+    public boolean isPlaychoice10() {
+        return (this.flag7 >> 1 & 1) == 1;
     }
 
     public boolean isValidHeader() {

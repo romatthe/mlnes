@@ -7,7 +7,7 @@ public enum TVSystem {
 
     private final int code;
 
-    private TVSystem(int code) {
+    TVSystem(int code) {
         this.code = code;
     }
 }
