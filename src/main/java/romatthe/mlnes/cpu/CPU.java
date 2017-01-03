@@ -19,11 +19,11 @@ public class CPU {
 
     // Registers
     // =========
-    private int registerPC =    0x0;    // Program Counter (16bit)
-    private short registerSP =  0x0;    // Stack Pointer (8bit)
-    private short registerA =   0x0;    // Accumulator (8bit)
-    private short registerX =   0x0;    // Index Register X (8bit)
-    private short registerY =   0x0;    // Index Register Y (8bit)
+    private int programCounter =    0x0;    // Program Counter (16bit)
+    private short stackPointer =    0x0;    // Stack Pointer (8bit)
+    private short registerA =       0x0;    // Accumulator (8bit)
+    private short registerX =       0x0;    // Index Register X (8bit)
+    private short registerY =       0x0;    // Index Register Y (8bit)
 
     // Processor Status
     // =========
@@ -39,17 +39,45 @@ public class CPU {
 
     // Part of the Processor Status register
     // Separated for convenience.
-    private boolean carryFlag = false;
-    private boolean zeroFlag = true;
-    private boolean interruptDisable = true;
-    private boolean decimalModeFlag = false;
-    private boolean breakCommand = false;
-    private boolean overflowFlag = false;
-    private boolean negativeFlag = false;
+    private CPUFlags flags = new CPUFlags();
 
     // Maskable Interrupt
     // One of "irq/brk", "nmi", "reset"
     private String interrupt = null;
 
+    public void reset() {
+        this.resetMemory(); //TODO Split into seperate method after memory is seperate object
+        this.flags.reset();
 
+        this.programCounter = this.getResetVector();
+        this.stackPointer = 0xFD;
+
+        this.registerA = 0x0;
+        this.registerX = 0x0;
+        this.registerY = 0x0;
+
+        this.status = this.flags.getProcessorFlags();
+
+    }
+
+    private void resetMemory() {
+        this.memory = new short[0x10000];
+
+        // Set 2kb Internal RAM
+        for (int i = 0; i <= 0x2000; i++) {
+            this.memory[i] = 0xFF;
+        }
+
+        // Set all others set to 0.
+        for (int i = 0x2000; i <= 0x8000; i++) {
+            this.memory[i] = 0;
+        }
+    }
+
+    /*
+    // Serialise the list of individual processor flags into the register's value.
+    CPU.prototype.getProcessorFlags = function() {
+        return +this.carryFlag | +this.zeroFlag << 1 | +this.interruptDisable << 2 | +this.decimalModeFlag << 3 | +this.breakCommand << 4 | 0x20 | +this.overflowFlag << 6 | +this.negativeFlag << 7;
+    };
+    */
 }
