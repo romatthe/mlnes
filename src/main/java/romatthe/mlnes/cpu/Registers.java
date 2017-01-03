@@ -7,4 +7,8 @@ public class Registers {
     private short stackPointer;
     private int programCounter;
     private CPUStatus processorStatus;
+
+    public int getProgramCounter() {
+        return programCounter;
+    }
 }
