@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MLNes {
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to MLNES");
+
         ROM rom = ROMLoader.load("/Users/robinm/Source/mlnes/src/main/resources/test.bin");
 
         System.out.println(rom);
