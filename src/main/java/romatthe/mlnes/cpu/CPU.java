@@ -74,10 +74,21 @@ public class CPU {
         }
     }
 
-    /*
-    // Serialise the list of individual processor flags into the register's value.
-    CPU.prototype.getProcessorFlags = function() {
-        return +this.carryFlag | +this.zeroFlag << 1 | +this.interruptDisable << 2 | +this.decimalModeFlag << 3 | +this.breakCommand << 4 | 0x20 | +this.overflowFlag << 6 | +this.negativeFlag << 7;
+    // Find where the program begins.
+    private int getResetVector() {
+        return this.loadMemory(0xfffc, true);
     };
-    */
+
+    // Load memory, with an optional double read for 2 bytes.
+    private short loadMemory(int address, boolean isDouble) {
+        if (!isDouble) {
+            // TODO Read from the NES ROM Mapper
+            //return this.nes.mapper.load(address);
+        }
+
+        // TODO Read double memory segment from the NES ROM Mapper
+        //return this.nes.mapper.load(address) | (this.nes.mapper.load(address + 1) << 8)
+
+        return 0x0; // TODO Fix above and return actual memory value
+    };
 }
