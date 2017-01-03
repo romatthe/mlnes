@@ -1,7 +1,7 @@
 package romatthe.mlnes;
 
 import romatthe.mlnes.rom.ROM;
-import romatthe.mlnes.rom.RomLoader;
+import romatthe.mlnes.rom.ROMLoader;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MLNes {
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println("Welcome to MLNES");
-        ROM rom = RomLoader.load("/Users/robinm/Source/mlnes/src/main/resources/test.bin");
+        ROM rom = ROMLoader.load("/Users/robinm/Source/mlnes/src/main/resources/test.bin");
 
         System.out.println(rom);
 

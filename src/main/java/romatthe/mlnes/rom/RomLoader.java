@@ -6,7 +6,7 @@ import java.io.InputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-public class RomLoader {
+public class ROMLoader {
     public static ROM load(String filePath) throws IOException {
         InputStream in = FileUtils.openInputStream(new File(filePath));
         byte[] header = IOUtils.readFully(in, 16);
