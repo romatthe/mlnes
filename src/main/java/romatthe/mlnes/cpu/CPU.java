@@ -19,11 +19,7 @@ public class CPU {
 
     // Registers
     // =========
-    private int programCounter =    0x0;    // Program Counter (16bit)
-    private short stackPointer =    0x0;    // Stack Pointer (8bit)
-    private short registerA =       0x0;    // Accumulator (8bit)
-    private short registerX =       0x0;    // Index Register X (8bit)
-    private short registerY =       0x0;    // Index Register Y (8bit)
+    private Registers registers = new Registers();
 
     // Processor Status
     // =========
@@ -48,16 +44,8 @@ public class CPU {
     public void reset() {
         this.memory.reset();
         this.flags.reset();
-
-        this.programCounter = this.getResetVector();
-        this.stackPointer = 0xFD;
-
-        this.registerA = 0x0;
-        this.registerX = 0x0;
-        this.registerY = 0x0;
-
+        this.registers.reset(this.getResetVector());
         this.status = this.flags.getProcessorFlags();
-
     }
 
     // Find where the program begins

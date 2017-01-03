@@ -112,9 +112,13 @@ public class CPUFlags {
     // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Flags_and_bitmasks
     public byte getProcessorFlags() {
         return
-            (byte)(+this.getCarryFlagValue() | +this.getZeroFlagValue() << 1
-                | +this.getInterruptDisableValue() << 2 | +this.getDecimalModeFlagValue() << 3
-                | +this.getBreakCommandFlagValue() << 4 | 0x20 | +this.getOverflowFlagValue() << 6
+            (byte)(+this.getCarryFlagValue()
+                | +this.getZeroFlagValue() << 1
+                | +this.getInterruptDisableValue() << 2
+                | +this.getDecimalModeFlagValue() << 3
+                | +this.getBreakCommandFlagValue() << 4
+                | 0x20
+                | +this.getOverflowFlagValue() << 6
                 | +this.getNegativeFlagValue() << 7);
     }
 

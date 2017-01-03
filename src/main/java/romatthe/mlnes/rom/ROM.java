@@ -46,7 +46,7 @@ public class ROM {
     @Override
     public String toString() {
         return String.format(
-            "CRC32\t\t\t : %s\nPGR ROM\t\t\t : %s\nPRG RAM\t\t\t : %s\nCHR ROM\t\t\t : %s\nMapper\t\t\t : %d\nTV System\t\t : %s\nIs PlayChoice-10 : %b\nIs VS. UniSystem : %b\n",
+            "CRC32\t\t : %s\nPGR ROM\t\t : %s\nPRG RAM\t\t : %s\nCHR ROM\t\t : %s\nMapper\t\t : %d\nTV System\t : %s\nIs PlayChoice-10 : %b\nIs VS. UniSystem : %b\n",
             this.getCRC32(),
             FileUtils.byteCountToDisplaySize(this.getPRGROMSize()),
             FileUtils.byteCountToDisplaySize(this.getPRGRAMSize()),
