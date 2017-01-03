@@ -36,13 +36,15 @@ public class MemoryBasic implements Memory {
 
     public void reset() {
         this.mem = new short[mem.length];
-    }
 
-    public short fetch(int address) {
-        if (this.isReadsDisabled()) {
-            return 0xff;
-        } else {
-            return this.mem[address];
+        // Set 2kb Internal RAM
+        for (int i = 0; i <= 0x2000; i++) {
+            this.mem[i] = 0xFF;
+        }
+
+        // Set all others set to 0.
+        for (int i = 0x2000; i <= 0x8000; i++) {
+            this.mem[i] = 0x0;
         }
     }
 
@@ -56,4 +58,18 @@ public class MemoryBasic implements Memory {
 
         return 0xff;
     }
+
+    public short fetch(int address, boolean isDouble) {
+        if (isReadsDisabled()) {
+            if (!isDouble) {
+                // TODO Read from the NES ROM Mapper
+                //return this.nes.mapper.load(address);
+            }
+
+            // TODO Read double memory segment from the NES ROM Mapper
+            //return this.nes.mapper.load(address) | (this.nes.mapper.load(address + 1) << 8)
+        }
+
+        return 0x0; // TODO Fix above and return actual memory value
+    };
 }

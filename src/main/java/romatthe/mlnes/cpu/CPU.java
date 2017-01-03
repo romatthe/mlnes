@@ -15,7 +15,7 @@ public class CPU {
     // 0x8000 => SRAM
     // 0xC000 => PRG-ROM (Lower Bank)
     // 0x10000 => PRG-ROM (Upper Bank)
-    private short[] memory = new short[0x10000];
+    private MemoryBasic memory = new MemoryBasic(0x10000);
 
     // Registers
     // =========
@@ -46,7 +46,7 @@ public class CPU {
     private String interrupt = null;
 
     public void reset() {
-        this.resetMemory(); //TODO Split into seperate method after memory is seperate object
+        this.memory.reset();
         this.flags.reset();
 
         this.programCounter = this.getResetVector();
@@ -60,35 +60,8 @@ public class CPU {
 
     }
 
-    private void resetMemory() {
-        this.memory = new short[0x10000];
-
-        // Set 2kb Internal RAM
-        for (int i = 0; i <= 0x2000; i++) {
-            this.memory[i] = 0xFF;
-        }
-
-        // Set all others set to 0.
-        for (int i = 0x2000; i <= 0x8000; i++) {
-            this.memory[i] = 0;
-        }
-    }
-
-    // Find where the program begins.
+    // Find where the program begins
     private int getResetVector() {
-        return this.loadMemory(0xfffc, true);
-    };
-
-    // Load memory, with an optional double read for 2 bytes.
-    private short loadMemory(int address, boolean isDouble) {
-        if (!isDouble) {
-            // TODO Read from the NES ROM Mapper
-            //return this.nes.mapper.load(address);
-        }
-
-        // TODO Read double memory segment from the NES ROM Mapper
-        //return this.nes.mapper.load(address) | (this.nes.mapper.load(address + 1) << 8)
-
-        return 0x0; // TODO Fix above and return actual memory value
+        return this.memory.fetch(0xfffc, true);
     };
 }

@@ -36,7 +36,7 @@ public class MLNes {
         };
 
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
-        executor.scheduleAtFixedRate(incrementRunnable, 0, 1, TimeUnit.SECONDS);
-        executor.scheduleAtFixedRate(decrementRunnable, 0, 4, TimeUnit.SECONDS);
+        //executor.scheduleAtFixedRate(incrementRunnable, 0, 1, TimeUnit.SECONDS);
+        //executor.scheduleAtFixedRate(decrementRunnable, 0, 4, TimeUnit.SECONDS);
     }
 }
