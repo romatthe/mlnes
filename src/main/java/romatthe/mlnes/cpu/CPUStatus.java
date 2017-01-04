@@ -1,17 +1,17 @@
 package romatthe.mlnes.cpu;
 
 public enum CPUStatus {
-    C((byte)1), // Carry flag
-    Z((byte)2), // Zero flag
-    I((byte)3), // Interrupt disable
-    D((byte)4), // Decimal mode
-    B((byte)5), // Break command
-    V((byte)7), // Overflow flag
-    N((byte)8); // Negative flag
+    C((short)1), // Carry flag
+    Z((short)2), // Zero flag
+    I((short)3), // Interrupt disable
+    D((short)4), // Decimal mode
+    B((short)5), // Break command
+    V((short)7), // Overflow flag
+    N((short)8); // Negative flag
 
-    private final byte code;
+    private final short code;
 
-    CPUStatus(byte code) {
+    CPUStatus(short code) {
         this.code = code;
     }
 }

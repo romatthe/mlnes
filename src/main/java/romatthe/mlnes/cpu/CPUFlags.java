@@ -107,6 +107,11 @@ public class CPUFlags {
         return (this.isNegativeFlag()) ? (byte)1 : (byte)0;
     }
 
+    public void setProcessorFlags(final int result) {
+        zeroFlag = (result == 0);
+        negativeFlag = ((result & 128) != 0);
+    }
+
     // Get the numeric representation of the processor flags
     // i.e.: flags = 5 --> 0101 --> Flag 1: 0, Flag 2: 1, Flag 3: 0, Flag 4: 1
     // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Operators/Bitwise_Operators#Flags_and_bitmasks

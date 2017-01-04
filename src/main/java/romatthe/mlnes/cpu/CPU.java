@@ -36,7 +36,7 @@ public class CPU {
     // 5 => Empty
     // 6 => Overflow (if previous instruction resulted in an invalid two's complement)
     // 7 => Negative
-    private byte status = 0x0;
+    private short status  = 0x0;
 
     // Part of the Processor Status register
     // Separated for convenience.
@@ -45,6 +45,26 @@ public class CPU {
     // Maskable Interrupt
     // One of "irq/brk", "nmi", "reset"
     private String interrupt = null;
+
+    public Memory getMemory() {
+        return this.memory;
+    }
+
+    public CPUFlags getFlags() {
+        return this.flags;
+    }
+
+    public Registers getRegisters() {
+        return this.registers;
+    }
+
+    public short getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(short status) {
+        this.status = status;
+    }
 
     public void reset() {
         this.memory.reset();
@@ -127,7 +147,7 @@ public class CPU {
         return high << 8 | low;
     }
 
-    private int absoluteIndexedAddress(short index, InstructionStatus instructionStatus) {
+    public int absoluteIndexedAddress(short index, InstructionStatus instructionStatus) {
         int low = this.memory.fetch(this.registers.getProgramCounter());
         int high = this.memory.fetch(this.registers.getProgramCounter() + 1);
         this.registers.setProgramCounter(this.registers.getProgramCounter() + 2);
@@ -142,7 +162,7 @@ public class CPU {
         return result;
     }
 
-    private int indexedIndirectAddress() {
+    public int indexedIndirectAddress() {
         short value = this.memory.fetch(this.registers.getProgramCounter());
         int address = value + this.registers.getRegisterX();
         this.registers.incrementProgramCounter();
@@ -153,7 +173,7 @@ public class CPU {
         return high << 8 | low;
     }
 
-    private int indirectIndexedAddress(InstructionStatus instructionStatus) {
+    public int indirectIndexedAddress(InstructionStatus instructionStatus) {
         int address = this.memory.fetch(this.registers.getProgramCounter());
         this.registers.incrementProgramCounter();
 
@@ -172,7 +192,7 @@ public class CPU {
     }
 
 
-    private short indexToRegister(short index) {
+    public short indexToRegister(short index) {
         if (index == this.registers.getRegisterX()) {
             return this.registers.getRegisterX();
         }
