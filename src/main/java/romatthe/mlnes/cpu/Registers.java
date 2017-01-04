@@ -64,6 +64,10 @@ public class Registers {
         this.processorStatus = processorStatus;
     }
 
+    public void incrementProgramCounter() {
+        this.programCounter++;
+    }
+
     public void reset(int resetProgramCounter) {
         this.setProgramCounter(resetProgramCounter);
         this.setStackPointer((short)0xFD);

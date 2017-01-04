@@ -59,17 +59,18 @@ public class MemoryBasic implements Memory {
         return 0xff;
     }
 
-    public short fetch(int address, boolean isDouble) {
-        if (isReadsDisabled()) {
-            if (!isDouble) {
-                // TODO Read from the NES ROM Mapper
-                //return this.nes.mapper.load(address);
-            }
-
-            // TODO Read double memory segment from the NES ROM Mapper
-            //return this.nes.mapper.load(address) | (this.nes.mapper.load(address + 1) << 8)
+    public short fetch(int address) {
+        if (this.isReadsDisabled()) {
+            return 0xff;
+        } else {
+            return this.mem[address];
         }
+    }
 
-        return 0x0; // TODO Fix above and return actual memory value
-    };
+    // Returns true if the two addresses are located in the same page in memory.
+    // Two addresses are on the same page if their high bytes are both the same,
+    // i.e. 0x0101 and 0x0103 are on the same page but 0x0101 and 0x0203 are not.
+    public boolean isSamePage(int address1, int address2) {
+        return (address1 ^ address2) >> 8 == 0;
+    }
 }

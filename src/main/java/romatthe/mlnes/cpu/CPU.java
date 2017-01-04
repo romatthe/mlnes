@@ -1,6 +1,11 @@
 package romatthe.mlnes.cpu;
 
+import romatthe.mlnes.cpu.instructions.InstructionStatus;
+
 public class CPU {
+
+    private final int PAGE_CROSS = 1;
+    private final int BRANCHED = 2;
 
     // NES Memory Layout
     // ======
@@ -50,6 +55,132 @@ public class CPU {
 
     // Find where the program begins
     private int getResetVector() {
-        return this.memory.fetch(0xfffc, true);
+        return this.memory.fetch(0xfffc);
     };
+
+    private void step() {
+        // TODO CPU logic goes here? ┐(￣ヘ￣;)┌
+    }
+
+    // Immediate Addressing Mode
+    public int immediateAddress() {
+        int result = this.registers.getProgramCounter();
+        this.registers.incrementProgramCounter();
+
+        return result;
+    }
+
+    public int zeroPageAddress() {
+        short result = this.memory.fetch(this.registers.getProgramCounter());
+        this.registers.incrementProgramCounter();
+
+        return result;
+    }
+
+    public int zeroPageIndexedAddress(short index) {
+        short value = this.memory.fetch(this.registers.getProgramCounter());
+        int result = value + this.indexToRegister(index);
+        this.registers.incrementProgramCounter();
+
+        return result;
+    }
+
+    public int relativeAddress() {
+        short value = this.memory.fetch(this.registers.getProgramCounter());
+        this.registers.incrementProgramCounter();
+
+        int offset = 0x0;
+
+        if (value > 0x7f) {
+            offset = -(0x0100 - value);
+        } else {
+            offset = value;
+        }
+
+        return this.registers.getProgramCounter() + offset;
+    }
+
+    public int absoluteAddress() {
+        int low = this.memory.fetch(this.registers.getProgramCounter());
+        int high = this.memory.fetch(this.registers.getProgramCounter() + 1);
+        this.registers.setProgramCounter(this.registers.getProgramCounter() + 2);
+
+        return (high << 8) | low;
+    }
+
+    public int indirectAddress() {
+        int low = this.memory.fetch(this.registers.getProgramCounter());
+        int high = this.memory.fetch(this.registers.getProgramCounter() + 1);
+        this.registers.setProgramCounter(this.registers.getProgramCounter() + 2);
+
+        // XXX: The 6502 had a bug in which it incremented only the
+        // high byte instead of the whole 16-bit address when computing the address.
+        //
+        // See http://www.obelisk.demon.co.uk/6502/reference.html#JMP
+        // and http://www.6502.org/tutorials/6502opcodes.html#JMP for details
+        int aHigh = high << 8 | low + 1;
+        int aLow = high << 8 | low;
+
+        low = this.memory.fetch(aLow);
+        high = this.memory.fetch(aHigh);
+
+        return high << 8 | low;
+    }
+
+    private int absoluteIndexedAddress(short index, InstructionStatus instructionStatus) {
+        int low = this.memory.fetch(this.registers.getProgramCounter());
+        int high = this.memory.fetch(this.registers.getProgramCounter() + 1);
+        this.registers.setProgramCounter(this.registers.getProgramCounter() + 2);
+
+        int address = high << 8 | low;
+        int result = address + this.indexToRegister(index);
+
+        if (instructionStatus != null && !this.memory.isSamePage(address, result)) {
+            instructionStatus.setStatus(instructionStatus.getStatus() | PAGE_CROSS);
+        }
+
+        return result;
+    }
+
+    private int indexedIndirectAddress() {
+        short value = this.memory.fetch(this.registers.getProgramCounter());
+        int address = value + this.registers.getRegisterX();
+        this.registers.incrementProgramCounter();
+
+        int low = this.memory.fetch(address);
+        int high = this.memory.fetch((address + 1) & 0x00ff);
+
+        return high << 8 | low;
+    }
+
+    private int indirectIndexedAddress(InstructionStatus instructionStatus) {
+        int address = this.memory.fetch(this.registers.getProgramCounter());
+        this.registers.incrementProgramCounter();
+
+        int low = this.memory.fetch(address);
+        int high = this.memory.fetch((address + 1) & 0x00ff);
+
+        address = high << 8 | low;
+
+        int result = address + this.registers.getRegisterY();
+
+        if (instructionStatus != null && !this.memory.isSamePage(address, result)) {
+            instructionStatus.setStatus(instructionStatus.getStatus() | PAGE_CROSS);
+        }
+
+        return result;
+    }
+
+
+    private short indexToRegister(short index) {
+        if (index == this.registers.getRegisterX()) {
+            return this.registers.getRegisterX();
+        }
+        else if (index == this.registers.getRegisterY()) {
+            return this.registers.getRegisterY();
+        }
+
+        return 0x00;
+    }
+
 }

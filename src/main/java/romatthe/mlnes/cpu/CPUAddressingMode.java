@@ -1,6 +1,6 @@
 package romatthe.mlnes.cpu;
 
-public enum AddressingMode {
+public enum CPUAddressingMode {
     ZERO_PAGE               ((byte)0),
     INDEXED_ZERO_PAGE_X     ((byte)1),
     INDEXED_ZERO_PAGE_Y     ((byte)2),
@@ -17,7 +17,7 @@ public enum AddressingMode {
 
     private final byte code;
 
-    AddressingMode(byte code) {
+    CPUAddressingMode(byte code) {
         this.code = code;
     }
 
