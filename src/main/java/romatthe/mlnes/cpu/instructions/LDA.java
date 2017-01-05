@@ -35,9 +35,4 @@ public class LDA {
         return 4;
     };
 
-    public Function<CPU, Integer> funcLDAAbsoluteIndexed = cpu -> {
-        short aVal = funcLDA.apply(cpu, cpu.absoluteIndexedAddress(cpu.getRegisters().getRegisterX(), cpu.getStatus()));
-        return 4;
-    };
-
 }
